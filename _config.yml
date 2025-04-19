@@ -14,9 +14,9 @@ timezone:
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: c00lrabbit blog # the main title
+title: c00lrabbit # the main title
 
-tagline: Network Pentester # it will display as the subtitle
+tagline: Pentester, CTF Player # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
 
