@@ -65,10 +65,10 @@ admin                   [Status: 302, Size: 28, Words: 4, Lines: 1, Duration: 16
 - Login page 
 - `Olivia Cortez:olivi8` Using this credentials we can login
 
-![Admin_panel](https://c00lrabbit.github.io/assets/Images/WhiteR-Adm-panel.png){: .center-image }
+![Admin_panel](https://c00lrabbit.github.io/assets/Images/white-rose/WhiteR-Adm-panel.png){: .center-image }
 
 ## IDOR found on msg section in the URL
-![IDOR In msg](https://c00lrabbit.github.io/assets/Images/IDOR-Msg.png){: .center-image }
+![IDOR In msg](https://c00lrabbit.github.io/assets/Images/white-rose/IDOR-Msg.png){: .center-image }
 
 ```
 Found these creds using IDOR
@@ -80,7 +80,7 @@ Since Gayle is admin we can login as admin using these creds
 
 ## Found SSTI in `/settings` 
 
-![ejs-vuln](https://c00lrabbit.github.io/assets/Images/ejs-vuln.png){: .center-image }
+![ejs-vuln](https://c00lrabbit.github.io/assets/Images/white-rose/ejs-vuln.png){: .center-image }
 - We found ejs and found a RCE about that https://security.snyk.io/vuln/SNYK-JS-EJS-2803307
 
 ```
@@ -89,7 +89,7 @@ name=test&password=test&settings[view%20options][outputFunctionName]=x;process.m
 ```
 - We got a hit in our python server
 
-![Python-server](https://c00lrabbit.github.io/assets/Images/python-server.png)
+![Python-server](https://c00lrabbit.github.io/assets/Images/white-rose/python-server.png)
 
 Shell.sh
 ```bash
