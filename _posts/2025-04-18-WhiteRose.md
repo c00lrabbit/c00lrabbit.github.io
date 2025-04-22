@@ -73,7 +73,7 @@ admin                   [Status: 302, Size: 28, Words: 4, Lines: 1, Duration: 16
 ```
 Found these creds using IDOR
 
-Gayle Bev : p~]P@5!6;rs558:q
+Gayle Bev : <REDECTED>
 ```
 
 Since Gayle is admin we can login as admin using these creds
