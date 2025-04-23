@@ -18,7 +18,7 @@ I'm passionate about cybersecurity with a focus on ethical hacking, penetration 
 ## 🛠️ Skills and Tools
 
 - **Languages**: Python, Bash
-- **Security Tools**: Metasploit, Burp Suite, Wireshark, Nmap, OWASP ZAP
+- **Security Tools**: Metasploit, Burp Suite, Wireshark, Nmap, OWASP ZAP, BloodHound
 - **Other Skills**: Network Security, Vulnerability Assessment, Incident Response
 
 ## 📈 GitHub Stats
