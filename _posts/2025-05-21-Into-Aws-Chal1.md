@@ -9,7 +9,7 @@ tags: [Enum, Pacu, cybr]
 
 This is a Writup for challange lab from wonderful AWS Pentesting course by Tyler Ramsbay. I Highly Recommand you to take this course.
 
-Course Link - [Click Here]{https://academy.simplycyber.io/l/pdp/introduction-to-aws-pentesting}
+Course Link - [Click Here](https://academy.simplycyber.io/l/pdp/introduction-to-aws-pentesting)
 
 ## What is Pacu ?
 - Pacu is an open-source AWS exploitation framework used for cloud penetration testing.
