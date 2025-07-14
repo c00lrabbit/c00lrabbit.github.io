@@ -156,3 +156,5 @@ sudo sudoedit /etc/nginx/sites-available/admin.cyprusbank.thm
 - Overall it is a stright forward enjoyable box which i like.
 
 ## As Heath aka TCM said "Enumeration is key to success"
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O4O31I0TAI)
